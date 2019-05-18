@@ -313,6 +313,7 @@ struct ResetFromFileCommand: Command {
                             isStock: isStock,
                             ps: ps,
                             nm: nm,
+                            lasiseInSeconds: nil,
                             carModelID: carModelID)
             .save(on: db).flatMap { carStage -> EventLoopFuture<CarStage> in
                 if let youtubeId = youtubeId {
