@@ -1,0 +1,13 @@
+
+*/2 9,10 * * * root /app/crontab_update_youtube_videos.sh >> /var/log/cron.log 2>&1
+
+# * * * * * auszuführender Befehl
+# ┬ ┬ ┬ ┬ ┬
+# │ │ │ │ │
+# │ │ │ │ └──── Wochentag (0-7, Sonntag ist 0 oder 7)
+# │ │ │ └────── Monat (1-12)
+# │ │ └──────── Tag (1-31)
+# │ └────────── Stunde (0-23)
+# └──────────── Minute (0-59)
+
+# An empty line is required at the end of this file for a valid cron file.

@@ -1,0 +1,27 @@
+version: "3.3"
+services:
+  nginx:
+    image: valian/docker-nginx-auto-ssl
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/server.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/logs:/var/log/nginx
+    depends_on:
+      - api
+  api:
+    image: jpfanappapi:1.0.0
+    env_file: .prod.env
+    restart: always
+    volumes:
+      - images-volume:/app/images
+  db:
+    image: mysql:5
+    env_file: .prod.env
+    volumes:
+      - mysql-volume:/var/lib/mysql
+volumes:
+  mysql-volume:
+  images-volume:
