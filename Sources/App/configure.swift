@@ -80,13 +80,14 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     migrations.add(model: NotificationPreference.self, database: .mysql)
     migrations.add(migration: DevicesPushTokenUniqueKeyMigration.self, database: .mysql)
     migrations.add(model: CarStageYoutubeVideo.self, database: .mysql)
-    migrations.add(migration: RemoveStageIDFromYoutubeVideoMigration.self, database: .mysql)
+//    migrations.add(migration: RemoveStageIDFromYoutubeVideoMigration.self, database: .mysql)
     migrations.add(migration: AddDeleteCascadingForeignKeysMigration.self, database: .mysql)
-    migrations.add(migration: AddTimestampsMigration.self, database: .mysql)
+//    migrations.add(migration: AddTimestampsMigration.self, database: .mysql)
     migrations.add(model: Access.self, database: .mysql)
     migrations.add(model: VideoSerie.self, database: .mysql)
     migrations.add(model: VideoSerieYoutubeVideo.self, database: .mysql)
     migrations.add(migration: AddVideoSeriesDeleteCascadingForeignKeysMigration.self, database: .mysql)
+    migrations.add(migration: AddLasiseInSecondsToCarStageMigration.self, database: .mysql)
     services.register(migrations)
 
 

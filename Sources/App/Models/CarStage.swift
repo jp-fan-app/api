@@ -18,6 +18,7 @@ final class CarStage: MySQLModel {
     var isStock: Bool
     var ps: Double?
     var nm: Double?
+    var lasiseInSeconds: Double?
     var carModelID: CarModel.ID
     var createdAt: Date?
     var updatedAt: Date?
@@ -28,6 +29,7 @@ final class CarStage: MySQLModel {
          isStock: Bool,
          ps: Double?,
          nm: Double?,
+         lasiseInSeconds: Double?,
          carModelID: CarModel.ID) {
         self.id = id
         self.name = name
@@ -35,6 +37,7 @@ final class CarStage: MySQLModel {
         self.isStock = isStock
         self.ps = ps
         self.nm = nm
+        self.lasiseInSeconds = lasiseInSeconds
         self.carModelID = carModelID
         self.createdAt = Date()
         self.updatedAt = nil
