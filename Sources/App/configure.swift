@@ -87,6 +87,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     migrations.add(model: VideoSerie.self, database: .mysql)
     migrations.add(model: VideoSerieYoutubeVideo.self, database: .mysql)
     migrations.add(migration: AddVideoSeriesDeleteCascadingForeignKeysMigration.self, database: .mysql)
+    migrations.add(migration: AddLasiseInSecondsToCarStageMigration.self, database: .mysql)
     services.register(migrations)
 
 

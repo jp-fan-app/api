@@ -35,6 +35,7 @@ final class CarStageController {
                 carStage.isStock = patchCarStage.isStock
                 carStage.ps = patchCarStage.ps
                 carStage.nm = patchCarStage.nm
+                carStage.lasiseInSeconds = patchCarStage.lasiseInSeconds
                 carStage.carModelID = patchCarStage.carModelID
                 carStage.updatedAt = Date()
 
