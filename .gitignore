@@ -73,3 +73,5 @@ fastlane/test_output
 nginx/logs
 
 JPFanAppServer.xcodeproj
+
+*.mwb.bak
