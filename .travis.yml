@@ -19,7 +19,5 @@ jobs:
   include:
   - stage: develop
     name: Develop Job
-    install:
-    - source ./scripts/install_swift.sh
     script:
     - docker build -f Dockerfile --build-arg env=production -t $DOCKER_IMAGE_NAME .
