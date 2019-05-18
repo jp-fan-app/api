@@ -19,5 +19,7 @@ jobs:
   include:
   - stage: develop
     name: Develop Job
+    before_install:
+    - openssl aes-256-cbc -K $encrypted_efbae0515365_key -iv $encrypted_efbae0515365_iv -in .prod.env.enc -out .prod.env -d
     script:
     - docker build -f Dockerfile --build-arg env=production -t $DOCKER_IMAGE_NAME .
