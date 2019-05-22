@@ -35,7 +35,7 @@ final class NotificationController {
                                   onError: { _ in })
         .flatMap(to: HTTPResponse.self) { httpClient in
             let bodyDict: [String: Any] = [
-                "app_id": OneSignal.appID,
+                "app_id": OneSignal.appID(),
                 "opened": true
             ]
             let bodyData = try? JSONSerialization.data(withJSONObject: bodyDict,
@@ -174,7 +174,7 @@ final class NotificationController {
                                             onError: { _ in })
                 .flatMap(to: HTTPResponse.self) { httpClient in
                     let bodyDict: [String: Any] = [
-                        "app_id": OneSignal.appID,
+                        "app_id": OneSignal.appID(),
                         "include_player_ids": deviceChunk.compactMap({ $0.externalID }),
                         "headings": [
                             "en": notification.heading.en,

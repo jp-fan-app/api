@@ -63,7 +63,7 @@ final class Device: MySQLModel {
                                   onError: { _ in })
         .flatMap(to: HTTPResponse.self) { httpClient in
             let bodyDict: [String: Any] = [
-                "app_id": OneSignal.appID,
+                "app_id": OneSignal.appID(),
                 "device_type": self.platform.oneSignalCode(),
                 "identifier": self.pushToken,
                 "language": self.languageCode,
@@ -145,7 +145,7 @@ final class Device: MySQLModel {
                                   onError: { _ in })
         .flatMap(to: HTTPResponse.self) { httpClient in
             let bodyDict: [String: Any] = [
-                "app_id": OneSignal.appID,
+                "app_id": OneSignal.appID(),
                 "identifier": self.pushToken,
                 "language": self.languageCode,
                 "device_type": self.platform.oneSignalCode(),
