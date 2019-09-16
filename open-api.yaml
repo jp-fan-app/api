@@ -1,0 +1,1604 @@
+swagger: '2.0'
+info:
+  title: JP Fan App API
+  description: >-
+    This document was generated from the branch master.
+  version: 1.0.0
+  contact:
+    name: Christoph Pageler
+    url: 'https://github.com/cpageler93'
+host: 'api.jp-fan-app.de'
+schemes:
+  - https
+basePath: /api/v1
+paths:
+  /auth/login:
+    post:
+      summary: Login
+      description: >-
+        Login with Username + Password.
+
+        The generated `string` is the authentication token which is needed for
+        authenticated routes: Authorization: Bearer <YOUR TOKEN>
+      tags:
+        - Auth
+      consumes:
+        - application/json
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: '{"email":"<your email>","password":"<your pw>"}'
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /auth/changePassword:
+    post:
+      summary: Change Password
+      description: |-
+        Change password for authenticated user
+        DOESN'T revoke existing tokens
+      tags:
+        - Auth
+      consumes:
+        - application/json
+      parameters:
+        - required: false
+          schema:
+            type: string
+            default: '{"password":"<your new pw>"}'
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /manufacturers:
+    get:
+      summary: Index
+      description: ''
+      tags:
+        - Manufacturers
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+    post:
+      summary: Create
+      description: ''
+      tags:
+        - Manufacturers
+      consumes:
+        - application/json
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: '{"name":"Volkswagen"}'
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /manufacturers/{id}:
+    get:
+      summary: Get
+      description: ''
+      tags:
+        - Manufacturers
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+    patch:
+      summary: Patch
+      description: ''
+      tags:
+        - Manufacturers
+      consumes:
+        - application/json
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: '{"name":"Porsche"}'
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+    delete:
+      summary: Delete
+      description: ''
+      tags:
+        - Manufacturers
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: ''
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /manufacturers/{id}/models:
+    get:
+      summary: Models
+      description: All models associated with the given manufacturer
+      tags:
+        - Manufacturers
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /models:
+    get:
+      summary: Index
+      description: ''
+      tags:
+        - Models
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+    post:
+      summary: Create
+      description: |-
+        TransmissionType
+        - manual: 0
+        - automatic: 1
+
+        AxleType:
+        - all: 0
+        - front: 1
+        - rear: 2
+
+        `mainImageID` is optional
+      tags:
+        - Models
+      consumes:
+        - application/json
+      parameters:
+        - required: false
+          schema:
+            type: string
+            default: >-
+              {"name":"964","manufacturerID":22,"transmissionType":0,"axleType":2}
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /models/{id}:
+    get:
+      summary: Get
+      description: ''
+      tags:
+        - Models
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+    patch:
+      summary: Patch
+      description: ''
+      tags:
+        - Models
+      consumes:
+        - application/json
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: |-
+              {
+                "name": "R8 V10 Plus",
+                "transmissionType": 1,
+                "mainImageID": 165,
+                "manufacturerID": 6,
+                "axleType": 0
+              }
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+    delete:
+      summary: Delete
+      description: ''
+      tags:
+        - Models
+      consumes:
+        - application/json
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - required: false
+          schema:
+            type: string
+            default: |-
+              {
+              "name": "Test123"
+              }
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /models/{id}/images:
+    get:
+      summary: Images
+      description: All images associated with the given model
+      tags:
+        - Models
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /models/{id}/stages:
+    get:
+      summary: Stages
+      description: All stages associated with the given model
+      tags:
+        - Models
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /images:
+    get:
+      summary: Index
+      description: ''
+      tags:
+        - Images
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+    post:
+      summary: Create
+      description: ''
+      tags:
+        - Images
+      consumes:
+        - application/json
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: >-
+              {"copyrightInformation":"Youtube (JP Performance)","carModelID":56}
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /images/{id}:
+    get:
+      summary: Get
+      description: ''
+      tags:
+        - Images
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+    patch:
+      summary: Patch
+      description: ''
+      tags:
+        - Images
+      consumes:
+        - application/json
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: |-
+              {
+                "carModelID": 1,
+                "copyrightInformation": "FOO"
+              }
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+    delete:
+      summary: Delete
+      description: ''
+      tags:
+        - Images
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: ''
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /images/{id}/upload:
+    post:
+      summary: Upload
+      description: |-
+        Multipart File Upload for given Image
+        Name for file part: image must be kind of image/jpg
+      tags:
+        - Images
+      consumes:
+        - multipart/form-data
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - type: string
+          default: ''
+          name: image
+          required: false
+          in: formData
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /images/{id}/file:
+    get:
+      summary: File
+      description: >-
+        Returns File Content for the given Image or 404 when no File was
+        uploaded
+      tags:
+        - Images
+      consumes:
+        - multipart/form-data
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /stages:
+    get:
+      summary: Index
+      description: ''
+      tags:
+        - Stages
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+    post:
+      summary: Create
+      description: ''
+      tags:
+        - Stages
+      consumes:
+        - application/json
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: '{"name":"Turbo","isStock":false,"carModelID":9}'
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /stages/{id}:
+    get:
+      summary: Get
+      description: ''
+      tags:
+        - Stages
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+    patch:
+      summary: Patch
+      description: ''
+      tags:
+        - Stages
+      consumes:
+        - application/json
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: |-
+              {
+                "ps": 663.52,
+                "description": "",
+                "nm": 494.25,
+                "carModelID": 9,
+                "isStock": false,
+                "name": "Kompressor",
+                "lasiseInSeconds": 53.8
+              }
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+    delete:
+      summary: Delete
+      description: ''
+      tags:
+        - Stages
+      consumes:
+        - application/json
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - required: false
+          schema:
+            type: string
+            default: ''
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /stages/{id}/timings:
+    get:
+      summary: Timings
+      description: All timings associated with the given model
+      tags:
+        - Stages
+      consumes:
+        - application/json
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: ''
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /stages/{id}/videos:
+    get:
+      summary: Videos
+      description: All videos associated with the given model
+      tags:
+        - Stages
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: ''
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /stages/{stageID}/videos/{videoID}:
+    post:
+      summary: Add Relation
+      description: All videos associated with the given model
+      tags:
+        - Stages
+      parameters:
+        - type: integer
+          name: stageID
+          required: true
+          in: path
+        - type: integer
+          name: videoID
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: ''
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+    delete:
+      summary: Remove Relation
+      description: All videos associated with the given model
+      tags:
+        - Stages
+      parameters:
+        - type: integer
+          name: stageID
+          required: true
+          in: path
+        - type: integer
+          name: videoID
+          required: true
+          in: path
+        - required: false
+          schema:
+            type: string
+            default: ''
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /stagesVideosRelations:
+    get:
+      summary: All Video Relations
+      description: All videos associated with the given model
+      tags:
+        - Stages - Videos
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: ''
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /timings:
+    get:
+      summary: Index
+      description: ''
+      tags:
+        - Timings
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+    post:
+      summary: Create
+      description: |-
+        Seconds are not normalized.
+        There are `second1`, `second2` and `second3` which are Double values
+      tags:
+        - Timings
+      consumes:
+        - application/json
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: '{"range":"100-200","stageID":114,"second1":4.8}'
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /timings/{id}:
+    get:
+      summary: Get
+      description: ''
+      tags:
+        - Timings
+      responses:
+        default:
+          description: no response description was provided for this operation
+      parameters: 
+        - type: integer
+          name: id
+          required: true
+          in: path
+    patch:
+      summary: Patch
+      description: ''
+      tags:
+        - Timings
+      consumes:
+        - application/json
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - required: false
+          schema:
+            type: string
+            default: '{"range":"100-200","stageID":12,"second1":16}'
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+    delete:
+      summary: Delete
+      description: ''
+      tags:
+        - Timings
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - required: false
+          schema:
+            type: string
+            default: ''
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /videos:
+    get:
+      summary: Index
+      description: ''
+      tags:
+        - Videos
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /videos/{id}:
+    get:
+      summary: Get
+      description: ''
+      tags:
+        - Videos
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /videos/byVideoID/videoID:
+    get:
+      summary: By Video ID
+      description: ''
+      tags:
+        - Videos
+      responses:
+        default:
+          description: no response description was provided for this operation
+      parameters:
+        - type: string
+          name: videoID
+          default: 0b4qK92EIWc
+          required: true
+          in: path
+  /videos/{id}/stages:
+    get:
+      summary: Stages
+      description: ''
+      tags:
+        - Videos
+      responses:
+        default:
+          description: no response description was provided for this operation
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+  /videos/{id}/series:
+    get:
+      summary: Series
+      description: ''
+      tags:
+        - Videos
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /videoSeries:
+    get:
+      summary: Index
+      description: ''
+      tags:
+        - Video Series
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+    post:
+      summary: Create
+      description: ''
+      tags:
+        - Video Series
+      consumes:
+        - application/json
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: >-
+              {"title":"Volkswagen Golf 6 R
+              4XX","description":"","isPublic":true}
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /videoSeries/{id}:
+    get:
+      summary: Get
+      description: ''
+      tags:
+        - Video Series
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+    patch:
+      summary: Patch
+      description: ''
+      tags:
+        - Video Series
+      consumes:
+        - application/json
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: '{"title":"Lexus LC500","description":"","isPublic":true}'
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+    delete:
+      summary: Delete
+      description: ''
+      tags:
+        - Video Series
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: ''
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /videoSeries/{id}/videos:
+    get:
+      summary: Videos
+      description: All videos associated with the given model
+      tags:
+        - Video Series
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: ''
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /videoSeries/{videoSeriesID}/videos/{videoID}:
+    post:
+      summary: Add Relation
+      description: All videos associated with the given model
+      tags:
+        - Video Series
+      parameters:
+        - type: integer
+          name: videoSeriesID
+          required: true
+          in: path
+        - type: integer
+          name: videoID
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: ''
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+    delete:
+      summary: Remove Relation
+      description: All videos associated with the given model
+      tags:
+        - Video Series
+      parameters:
+        - type: integer
+          name: videoSeriesID
+          required: true
+          in: path
+        - type: integer
+          name: videoID
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: ''
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+    patch:
+      summary: Patch Relation
+      description: All videos associated with the given model
+      tags:
+        - Video Series
+      consumes:
+        - application/json
+      parameters:
+        - type: integer
+          name: videoSeriesID
+          required: true
+          in: path
+        - type: integer
+          name: videoID
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: '{"description":"Zweites Videos zum ..."}'
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /videoSeriesVideosRelations:
+    get:
+      summary: All Video Relations
+      description: All videos associated with the given model
+      tags:
+        - Video Series - Videos
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: ''
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /devices:
+    get:
+      summary: Index
+      description: >-
+        platform:
+        - iOS: 0
+        - Android: 1
+
+        isTestDevice: when set to true, the notifications will be sent via to
+        the sandbox servers. Only iPhones built via Xcode receive those
+        notifications. Default is false and can only be updated authenticate via
+        setTestDevice
+      tags:
+        - Devices
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+    post:
+      summary: Create
+      description: |-
+        platform:
+        - iOS: 0
+        - Android: 1
+      tags:
+        - Devices
+      consumes:
+        - application/json
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: >-
+              {"platform":0,"pushToken":"f75a12e0b907f87200e7a5c02df91c0c826e88b0f35208a083c8ab48af26a3f9","languageCode":"de"}
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /devices/{pushToken}:
+    get:
+      summary: Get
+      description: >-
+        Parameter is the `pushToken` instead of the incrementing id. Because
+        only the device itself knows its push tokens.
+      tags:
+        - Devices
+      parameters:
+        - type: string
+          name: pushToken
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+    patch:
+      summary: Patch
+      description: >-
+        Parameter is the `pushToken` instead of the incrementing id. Because
+        only the device itself knows its push tokens.
+
+        platform:
+        - iOS: 0
+        - Android: 1
+      tags:
+        - Devices
+      consumes:
+        - application/json
+      parameters:
+        - type: string
+          name: pushToken
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: >-
+              {"platform":0,"pushToken":"70c36796093b37a7f7d7b716833c3374c9866d67ac19a24e6c1ee4317fb403eb","languageCode":"en"}
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+    delete:
+      summary: Delete
+      description: >-
+        Parameter is the `pushToken` instead of the incrementing id. Because
+        only the device itself knows its push tokens.
+      tags:
+        - Devices
+      parameters:
+        - type: string
+          name: pushToken
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: ''
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /devices/{pushToken}/setTestDevice:
+    post:
+      summary: Set Test Device
+      description: ''
+      tags:
+        - Devices
+      consumes:
+        - application/json
+      parameters:
+        - type: string
+          name: pushToken
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: '{"bool":true}'
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /devices/{pushToken}/ping:
+    post:
+      summary: Ping
+      description: >-
+        Should be sent on app start when the device is already registered for
+        push notifications so the backend can determine which devices are active
+      tags:
+        - Devices
+      parameters:
+        - type: string
+          name: pushToken
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /devices/{pushToken}/notificationPreferences:
+    get:
+      summary: Notification Preferences
+      description: >-
+        Indicates what types of notifiations the user want to receive
+
+        entityType:
+        - Video
+        - Manufacturer (not implemented yet)
+        - Model (not implemented yet)
+        - Stage (not implemented yet)
+        - Timing (not implemented yet)
+        - Image (not implemented yet)
+
+        entityID:
+        - optional
+        - when null: the user receives notifications for changes on all entities
+        - when set to an id: the user receives notifications only for changes on
+        the specific id
+      tags:
+        - Devices
+      parameters:
+        - type: string
+          name: pushToken
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+    post:
+      summary: Create
+      description: ''
+      tags:
+        - Devices
+      consumes:
+        - application/json
+      parameters:
+        - type: string
+          name: pushToken
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: '{"entityType":"CarModel"}'
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /devices/{pushToken}/notificationPreferences/4:
+    delete:
+      summary: Delete
+      description: ''
+      tags:
+        - Devices
+      parameters:
+        - type: string
+          name: pushToken
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /notifications/devicesForEntityPair:
+    get:
+      summary: Devices for Entity Pair
+      description: >-
+        Returns list of devices which will receive notifications for given
+        entity pair
+      tags:
+        - Notifications
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - type: string
+          default: CarModel
+          name: entityType
+          required: false
+          in: query
+        - type: string
+          default: '53'
+          name: entityID
+          required: false
+          in: query
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /notifications/sendNotificationForEntityPair:
+    post:
+      summary: Send Notifications for Entity Pair
+      description: >-
+        Sends notification to devices which want to receive notifications for
+        given entity pair
+      tags:
+        - Notifications
+      consumes:
+        - application/json
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: '{"entityType":"Video","entityID":"1579"}'
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /notifications/track/{id}:
+    post:
+      summary: Track Notification
+      description: >-
+        Tracks the opening of a notification on the device
+
+        The Identifier (Parameter) must be fetched from the custom data inside
+        the notification
+      tags:
+        - Notifications
+      responses:
+        default:
+          description: no response description was provided for this operation
+      parameters:
+        - type: string
+          name: id
+          required: true
+          in: path
+  /access:
+    get:
+      summary: Index
+      description: ''
+      tags:
+        - Access
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+    post:
+      summary: Create
+      description: ''
+      tags:
+        - Access
+      consumes:
+        - application/json
+      parameters:
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: '{"name":"JP Fan App Admin iOS"}'
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+  /access/{id}:
+    get:
+      summary: Get
+      description: ''
+      tags:
+        - Access
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+      responses:
+        default:
+          description: no response description was provided for this operation
+    patch:
+      summary: Patch
+      description: ''
+      tags:
+        - Access
+      consumes:
+        - application/json
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: '{"name":"Test Chrostoph"}'
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+    delete:
+      summary: Delete
+      description: ''
+      tags:
+        - Access
+      parameters:
+        - type: integer
+          name: id
+          required: true
+          in: path
+        - type: string
+          default: 'YOUR ACCESS TOKEN'
+          name: x-access-token
+          required: true
+          in: header
+        - required: false
+          schema:
+            type: string
+            default: ''
+          in: body
+          name: body
+      responses:
+        default:
+          description: no response description was provided for this operation
+tags:
+  - name: Auth
+  - name: Manufacturers
+  - name: Models
+  - name: Images
+  - name: Stages
+  - name: Stages - Videos
+  - name: Timings
+  - name: Videos
+  - name: Video Series
+  - name: Video Series - Videos
+  - name: Devices
+  - name: Notifications
+  - name: Access
