@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "JP Fan App API",
-    "description": "This document was generated from the branch master.",
+    "description": "API Documentation for the JP Fan App API.\nOpen Source: https://github.com/jp-fan-app/api\nTo make requests you need an **x-access-token**. Feel free to send me a message to get an access token.",
     "version": "1.0.0",
     "contact": {
       "name": "Christoph Pageler",
@@ -34,25 +34,59 @@
             "in": "header"
           },
           {
+            "name": "body",
+            "in": "body",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "{\"email\":\"<your email>\",\"password\":\"<your pw>\"}"
-            },
-            "in": "body",
-            "name": "body"
+              "type": "object",
+              "required": [
+                "email",
+                "password"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Valid Login Response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userID": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "string": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized Login Response",
+            "schema": {
+              "$ref": "#/definitions/ErrorModel"
+            }
           }
         }
       }
     },
     "/auth/changePassword": {
       "post": {
-        "summary": "Change Password",
+        "summary": "Change Password (DOCS TODO)",
         "description": "Change password for authenticated user\nDOESN'T revoke existing tokens",
         "tags": [
           "Auth"
@@ -95,8 +129,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Array of Manufacturers",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Manufacturer"
+              }
+            }
           }
         }
       },
@@ -118,18 +158,29 @@
             "in": "header"
           },
           {
+            "name": "body",
+            "in": "body",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "{\"name\":\"Volkswagen\"}"
-            },
-            "in": "body",
-            "name": "body"
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the new manufacturer"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Manufacturer",
+            "schema": {
+              "$ref": "#/definitions/Manufacturer"
+            }
           }
         }
       }
@@ -157,8 +208,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Manufacturer",
+            "schema": {
+              "$ref": "#/definitions/Manufacturer"
+            }
+          },
+          "404": {
+            "description": "not found"
           }
         }
       },
@@ -186,18 +243,32 @@
             "in": "header"
           },
           {
+            "name": "body",
+            "in": "body",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "{\"name\":\"Porsche\"}"
-            },
-            "in": "body",
-            "name": "body"
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "New name of the manufacturer"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Manufacturer",
+            "schema": {
+              "$ref": "#/definitions/Manufacturer"
+            }
+          },
+          "404": {
+            "description": "not found"
           }
         }
       },
@@ -220,20 +291,14 @@
             "name": "x-access-token",
             "required": true,
             "in": "header"
-          },
-          {
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": ""
-            },
-            "in": "body",
-            "name": "body"
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "empty response"
+          },
+          "404": {
+            "description": "not found"
           }
         }
       }
@@ -261,8 +326,17 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "All models from manufacturer",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Model"
+              }
+            }
+          },
+          "404": {
+            "description": "not found"
           }
         }
       }
@@ -284,14 +358,20 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "All Models",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Model"
+              }
+            }
           }
         }
       },
       "post": {
         "summary": "Create",
-        "description": "TransmissionType\n- manual: 0\n- automatic: 1\n\nAxleType:\n- all: 0\n- front: 1\n- rear: 2\n\n`mainImageID` is optional",
+        "description": "`mainImageID` is optional",
         "tags": [
           "Models"
         ],
@@ -300,18 +380,41 @@
         ],
         "parameters": [
           {
+            "name": "body",
+            "in": "body",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "{\"name\":\"964\",\"manufacturerID\":22,\"transmissionType\":0,\"axleType\":2}"
-            },
-            "in": "body",
-            "name": "body"
+              "type": "object",
+              "required": [
+                "name",
+                "manufacturerID",
+                "transmissionType",
+                "axleType"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the new model"
+                },
+                "manufacturerID": {
+                  "type": "integer"
+                },
+                "transmissionType": {
+                  "type": "integer"
+                },
+                "axleType": {
+                  "type": "integer"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Model",
+            "schema": {
+              "$ref": "#/definitions/Model"
+            }
           }
         }
       }
@@ -339,8 +442,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Model",
+            "schema": {
+              "$ref": "#/definitions/Model"
+            }
+          },
+          "404": {
+            "description": "not found"
           }
         }
       },
@@ -368,18 +477,47 @@
             "in": "header"
           },
           {
+            "name": "body",
+            "in": "body",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "{\n  \"name\": \"R8 V10 Plus\",\n  \"transmissionType\": 1,\n  \"mainImageID\": 165,\n  \"manufacturerID\": 6,\n  \"axleType\": 0\n}"
-            },
-            "in": "body",
-            "name": "body"
+              "type": "object",
+              "required": [
+                "name",
+                "manufacturerID",
+                "transmissionType",
+                "axleType"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the new model"
+                },
+                "manufacturerID": {
+                  "type": "integer"
+                },
+                "transmissionType": {
+                  "type": "integer"
+                },
+                "axleType": {
+                  "type": "integer"
+                },
+                "mainImageID": {
+                  "type": "integer"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Model",
+            "schema": {
+              "$ref": "#/definitions/Model"
+            }
+          },
+          "404": {
+            "description": "not found"
           }
         }
       },
@@ -389,29 +527,20 @@
         "tags": [
           "Models"
         ],
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "integer",
             "name": "id",
             "required": true,
             "in": "path"
-          },
-          {
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": "{\n\"name\": \"Test123\"\n}"
-            },
-            "in": "body",
-            "name": "body"
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "empty response"
+          },
+          "404": {
+            "description": "not found"
           }
         }
       }
@@ -439,8 +568,17 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Images of model",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Image"
+              }
+            }
+          },
+          "404": {
+            "description": "not found"
           }
         }
       }
@@ -468,8 +606,17 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Stages of model",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Stage"
+              }
+            }
+          },
+          "404": {
+            "description": "not found"
           }
         }
       }
@@ -491,8 +638,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "All Images",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Image"
+              }
+            }
           }
         }
       },
@@ -514,18 +667,32 @@
             "in": "header"
           },
           {
+            "name": "body",
+            "in": "body",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "{\"copyrightInformation\":\"Youtube (JP Performance)\",\"carModelID\":56}"
-            },
-            "in": "body",
-            "name": "body"
+              "type": "object",
+              "required": [
+                "copyrightInformation",
+                "carModelID"
+              ],
+              "properties": {
+                "copyrightInformation": {
+                  "type": "string"
+                },
+                "carModelID": {
+                  "type": "integer"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Image",
+            "schema": {
+              "$ref": "#/definitions/Image"
+            }
           }
         }
       }
@@ -553,8 +720,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Image",
+            "schema": {
+              "$ref": "#/definitions/Image"
+            }
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       },
@@ -582,18 +755,35 @@
             "in": "header"
           },
           {
+            "name": "body",
+            "in": "body",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "{\n  \"carModelID\": 1,\n  \"copyrightInformation\": \"FOO\"\n}"
-            },
-            "in": "body",
-            "name": "body"
+              "type": "object",
+              "required": [
+                "copyrightInformation",
+                "carModelID"
+              ],
+              "properties": {
+                "copyrightInformation": {
+                  "type": "string"
+                },
+                "carModelID": {
+                  "type": "integer"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Image",
+            "schema": {
+              "$ref": "#/definitions/Image"
+            }
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       },
@@ -616,27 +806,21 @@
             "name": "x-access-token",
             "required": true,
             "in": "header"
-          },
-          {
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": ""
-            },
-            "in": "body",
-            "name": "body"
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "empty response"
+          },
+          "404": {
+            "description": "not found"
           }
         }
       }
     },
     "/images/{id}/upload": {
       "post": {
-        "summary": "Upload",
+        "summary": "Upload (DOCS TODO)",
         "description": "Multipart File Upload for given Image\nName for file part: image must be kind of image/jpg",
         "tags": [
           "Images"
@@ -675,7 +859,7 @@
     },
     "/images/{id}/file": {
       "get": {
-        "summary": "File",
+        "summary": "File (DOCS TODO)",
         "description": "Returns File Content for the given Image or 404 when no File was uploaded",
         "tags": [
           "Images"
@@ -722,8 +906,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "All Stages",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Stage"
+              }
+            }
           }
         }
       },
@@ -745,18 +935,37 @@
             "in": "header"
           },
           {
+            "name": "body",
+            "in": "body",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "{\"name\":\"Turbo\",\"isStock\":false,\"carModelID\":9}"
-            },
-            "in": "body",
-            "name": "body"
+              "type": "object",
+              "required": [
+                "name",
+                "isStock",
+                "carModelID"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the new stage"
+                },
+                "isStock": {
+                  "type": "boolean"
+                },
+                "carModelID": {
+                  "type": "integer"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Stage",
+            "schema": {
+              "$ref": "#/definitions/Stage"
+            }
           }
         }
       }
@@ -784,8 +993,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Stage",
+            "schema": {
+              "$ref": "#/definitions/Stage"
+            }
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       },
@@ -823,8 +1038,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Stage",
+            "schema": {
+              "$ref": "#/definitions/Stage"
+            }
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       },
@@ -834,29 +1055,20 @@
         "tags": [
           "Stages"
         ],
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "type": "integer",
             "name": "id",
             "required": true,
             "in": "path"
-          },
-          {
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": ""
-            },
-            "in": "body",
-            "name": "body"
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "empty response"
+          },
+          "404": {
+            "description": "not found"
           }
         }
       }
@@ -884,20 +1096,20 @@
             "name": "x-access-token",
             "required": true,
             "in": "header"
-          },
-          {
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": ""
-            },
-            "in": "body",
-            "name": "body"
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "All Timings from Stage",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Timing"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -922,27 +1134,27 @@
             "name": "x-access-token",
             "required": true,
             "in": "header"
-          },
-          {
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": ""
-            },
-            "in": "body",
-            "name": "body"
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "All Videos from Stage",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Image"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
     },
     "/stages/{stageID}/videos/{videoID}": {
       "post": {
-        "summary": "Add Relation",
+        "summary": "Add Relation (DOCS TODO)",
         "description": "All videos associated with the given model",
         "tags": [
           "Stages"
@@ -1001,27 +1213,21 @@
             "name": "videoID",
             "required": true,
             "in": "path"
-          },
-          {
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": ""
-            },
-            "in": "body",
-            "name": "body"
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "empty response"
+          },
+          "404": {
+            "description": "not found"
           }
         }
       }
     },
     "/stagesVideosRelations": {
       "get": {
-        "summary": "All Video Relations",
+        "summary": "All Video Relations (DOCS TODO)",
         "description": "All videos associated with the given model",
         "tags": [
           "Stages - Videos"
@@ -1033,15 +1239,6 @@
             "name": "x-access-token",
             "required": true,
             "in": "header"
-          },
-          {
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": ""
-            },
-            "in": "body",
-            "name": "body"
           }
         ],
         "responses": {
@@ -1068,8 +1265,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "All Timings",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Timing"
+              }
+            }
           }
         }
       },
@@ -1091,18 +1294,42 @@
             "in": "header"
           },
           {
+            "name": "body",
+            "in": "body",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "{\"range\":\"100-200\",\"stageID\":114,\"second1\":4.8}"
-            },
-            "in": "body",
-            "name": "body"
+              "type": "object",
+              "required": [
+                "range",
+                "stageID",
+                "second1"
+              ],
+              "properties": {
+                "range": {
+                  "type": "string"
+                },
+                "stageID": {
+                  "type": "integer"
+                },
+                "second1": {
+                  "type": "number"
+                },
+                "second2": {
+                  "type": "number"
+                },
+                "second3": {
+                  "type": "number"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Timing",
+            "schema": {
+              "$ref": "#/definitions/Timing"
+            }
           }
         }
       }
@@ -1114,11 +1341,6 @@
         "tags": [
           "Timings"
         ],
-        "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
-          }
-        },
         "parameters": [
           {
             "type": "integer",
@@ -1126,7 +1348,18 @@
             "required": true,
             "in": "path"
           }
-        ]
+        ],
+        "responses": {
+          "200": {
+            "description": "Single Timing",
+            "schema": {
+              "$ref": "#/definitions/Timing"
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
       },
       "patch": {
         "summary": "Patch",
@@ -1155,8 +1388,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Timing",
+            "schema": {
+              "$ref": "#/definitions/Timing"
+            }
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       },
@@ -1172,20 +1411,14 @@
             "name": "id",
             "required": true,
             "in": "path"
-          },
-          {
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": ""
-            },
-            "in": "body",
-            "name": "body"
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "empty response"
+          },
+          "404": {
+            "description": "not found"
           }
         }
       }
@@ -1207,8 +1440,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "All Videos",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Video"
+              }
+            }
           }
         }
       }
@@ -1236,24 +1475,25 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Video",
+            "schema": {
+              "$ref": "#/definitions/Video"
+            }
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       }
     },
-    "/videos/byVideoID/videoID": {
+    "/videos/byVideoID/{videoID}": {
       "get": {
         "summary": "By Video ID",
         "description": "",
         "tags": [
           "Videos"
         ],
-        "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
-          }
-        },
         "parameters": [
           {
             "type": "string",
@@ -1262,7 +1502,18 @@
             "required": true,
             "in": "path"
           }
-        ]
+        ],
+        "responses": {
+          "200": {
+            "description": "Single Video",
+            "schema": {
+              "$ref": "#/definitions/Video"
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
       }
     },
     "/videos/{id}/stages": {
@@ -1272,11 +1523,6 @@
         "tags": [
           "Videos"
         ],
-        "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
-          }
-        },
         "parameters": [
           {
             "type": "integer",
@@ -1284,7 +1530,21 @@
             "required": true,
             "in": "path"
           }
-        ]
+        ],
+        "responses": {
+          "200": {
+            "description": "All Stages from Video",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Stage"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
       }
     },
     "/videos/{id}/series": {
@@ -1310,8 +1570,17 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "All Series from Video",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VideoSeries"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -1333,8 +1602,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "All Video Series",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VideoSeries"
+              }
+            }
           }
         }
       },
@@ -1356,18 +1631,37 @@
             "in": "header"
           },
           {
+            "name": "body",
+            "in": "body",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "{\"title\":\"Volkswagen Golf 6 R 4XX\",\"description\":\"\",\"isPublic\":true}"
-            },
-            "in": "body",
-            "name": "body"
+              "type": "object",
+              "required": [
+                "title",
+                "description",
+                "isPublic"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "Title of the new video series"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "isPublic": {
+                  "type": "boolean"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Video Series",
+            "schema": {
+              "$ref": "#/definitions/VideoSeries"
+            }
           }
         }
       }
@@ -1395,8 +1689,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Video Series",
+            "schema": {
+              "$ref": "#/definitions/VideoSeries"
+            }
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       },
@@ -1434,8 +1734,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Video Series",
+            "schema": {
+              "$ref": "#/definitions/VideoSeries"
+            }
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       },
@@ -1458,20 +1764,14 @@
             "name": "x-access-token",
             "required": true,
             "in": "header"
-          },
-          {
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": ""
-            },
-            "in": "body",
-            "name": "body"
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "empty response"
+          },
+          "404": {
+            "description": "not found"
           }
         }
       }
@@ -1496,27 +1796,24 @@
             "name": "x-access-token",
             "required": true,
             "in": "header"
-          },
-          {
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": ""
-            },
-            "in": "body",
-            "name": "body"
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "All Videos from Video Series",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Video"
+              }
+            }
           }
         }
       }
     },
     "/videoSeries/{videoSeriesID}/videos/{videoID}": {
       "post": {
-        "summary": "Add Relation",
+        "summary": "Add Relation (DOCS TODO)",
         "description": "All videos associated with the given model",
         "tags": [
           "Video Series"
@@ -1582,25 +1879,19 @@
             "name": "x-access-token",
             "required": true,
             "in": "header"
-          },
-          {
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": ""
-            },
-            "in": "body",
-            "name": "body"
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "empty response"
+          },
+          "404": {
+            "description": "not found"
           }
         }
       },
       "patch": {
-        "summary": "Patch Relation",
+        "summary": "Patch Relation (DOCS TODO)",
         "description": "All videos associated with the given model",
         "tags": [
           "Video Series"
@@ -1647,7 +1938,7 @@
     },
     "/videoSeriesVideosRelations": {
       "get": {
-        "summary": "All Video Relations",
+        "summary": "All Video Relations (DOCS TODO)",
         "description": "All videos associated with the given model",
         "tags": [
           "Video Series - Videos"
@@ -1659,15 +1950,6 @@
             "name": "x-access-token",
             "required": true,
             "in": "header"
-          },
-          {
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": ""
-            },
-            "in": "body",
-            "name": "body"
           }
         ],
         "responses": {
@@ -1694,8 +1976,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "All Devices",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Device"
+              }
+            }
           }
         }
       },
@@ -1717,18 +2005,36 @@
             "in": "header"
           },
           {
+            "name": "body",
+            "in": "body",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "{\"platform\":0,\"pushToken\":\"f75a12e0b907f87200e7a5c02df91c0c826e88b0f35208a083c8ab48af26a3f9\",\"languageCode\":\"de\"}"
-            },
-            "in": "body",
-            "name": "body"
+              "type": "object",
+              "required": [
+                "platform",
+                "pushToken",
+                "languageCode"
+              ],
+              "properties": {
+                "platform": {
+                  "type": "integer"
+                },
+                "pushToken": {
+                  "type": "string"
+                },
+                "languageCode": {
+                  "type": "string"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Device",
+            "schema": {
+              "$ref": "#/definitions/Device"
+            }
           }
         }
       }
@@ -1756,8 +2062,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Device",
+            "schema": {
+              "$ref": "#/definitions/Device"
+            }
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       },
@@ -1795,8 +2107,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Device",
+            "schema": {
+              "$ref": "#/definitions/Device"
+            }
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       },
@@ -1819,27 +2137,21 @@
             "name": "x-access-token",
             "required": true,
             "in": "header"
-          },
-          {
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": ""
-            },
-            "in": "body",
-            "name": "body"
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "empty response"
+          },
+          "404": {
+            "description": "not found"
           }
         }
       }
     },
     "/devices/{pushToken}/setTestDevice": {
       "post": {
-        "summary": "Set Test Device",
+        "summary": "Set Test Device (DOCS TODO)",
         "description": "",
         "tags": [
           "Devices"
@@ -1880,7 +2192,7 @@
     },
     "/devices/{pushToken}/ping": {
       "post": {
-        "summary": "Ping",
+        "summary": "Ping (DOCS TODO)",
         "description": "Should be sent on app start when the device is already registered for push notifications so the backend can determine which devices are active",
         "tags": [
           "Devices"
@@ -1909,7 +2221,7 @@
     },
     "/devices/{pushToken}/notificationPreferences": {
       "get": {
-        "summary": "Notification Preferences",
+        "summary": "Notification Preferences (DOCS TODO)",
         "description": "Indicates what types of notifiations the user want to receive\nentityType: - Video - Manufacturer (not implemented yet) - Model (not implemented yet) - Stage (not implemented yet) - Timing (not implemented yet) - Image (not implemented yet)\nentityID: - optional - when null: the user receives notifications for changes on all entities - when set to an id: the user receives notifications only for changes on the specific id",
         "tags": [
           "Devices"
@@ -1936,7 +2248,7 @@
         }
       },
       "post": {
-        "summary": "Create",
+        "summary": "Create (DOCS TODO)",
         "description": "",
         "tags": [
           "Devices"
@@ -1975,7 +2287,7 @@
         }
       }
     },
-    "/devices/{pushToken}/notificationPreferences/4": {
+    "/devices/{pushToken}/notificationPreferences/{id}": {
       "delete": {
         "summary": "Delete",
         "description": "",
@@ -1990,6 +2302,12 @@
             "in": "path"
           },
           {
+            "type": "integer",
+            "name": "id",
+            "required": true,
+            "in": "path"
+          },
+          {
             "type": "string",
             "default": "YOUR ACCESS TOKEN",
             "name": "x-access-token",
@@ -1998,15 +2316,18 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "empty response"
+          },
+          "404": {
+            "description": "not found"
           }
         }
       }
     },
     "/notifications/devicesForEntityPair": {
       "get": {
-        "summary": "Devices for Entity Pair",
+        "summary": "Devices for Entity Pair (DOCS TODO)",
         "description": "Returns list of devices which will receive notifications for given entity pair",
         "tags": [
           "Notifications"
@@ -2043,7 +2364,7 @@
     },
     "/notifications/sendNotificationForEntityPair": {
       "post": {
-        "summary": "Send Notifications for Entity Pair",
+        "summary": "Send Notifications for Entity Pair (DOCS TODO)",
         "description": "Sends notification to devices which want to receive notifications for given entity pair",
         "tags": [
           "Notifications"
@@ -2078,7 +2399,7 @@
     },
     "/notifications/track/{id}": {
       "post": {
-        "summary": "Track Notification",
+        "summary": "Track Notification (DOCS TODO)",
         "description": "Tracks the opening of a notification on the device\nThe Identifier (Parameter) must be fetched from the custom data inside the notification",
         "tags": [
           "Notifications"
@@ -2115,8 +2436,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "All Access Tokens",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Access"
+              }
+            }
           }
         }
       },
@@ -2138,18 +2465,29 @@
             "in": "header"
           },
           {
+            "name": "body",
+            "in": "body",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "{\"name\":\"JP Fan App Admin iOS\"}"
-            },
-            "in": "body",
-            "name": "body"
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the new access token"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Access Token",
+            "schema": {
+              "$ref": "#/definitions/Access"
+            }
           }
         }
       }
@@ -2177,8 +2515,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Access Token",
+            "schema": {
+              "$ref": "#/definitions/Access"
+            }
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       },
@@ -2216,8 +2560,14 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "Single Access Token",
+            "schema": {
+              "$ref": "#/definitions/Access"
+            }
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       },
@@ -2240,20 +2590,14 @@
             "name": "x-access-token",
             "required": true,
             "in": "header"
-          },
-          {
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": ""
-            },
-            "in": "body",
-            "name": "body"
           }
         ],
         "responses": {
-          "default": {
-            "description": "no response description was provided for this operation"
+          "200": {
+            "description": "empty response"
+          },
+          "404": {
+            "description": "not found"
           }
         }
       }
@@ -2299,5 +2643,239 @@
     {
       "name": "Access"
     }
-  ]
+  ],
+  "definitions": {
+    "ErrorModel": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "Manufacturer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        }
+      }
+    },
+    "Model": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "manufacturerID": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "axleType": {
+          "type": "integer",
+          "description": "- all: 0 - front: 1 - rear: 2"
+        },
+        "mainImageID": {
+          "type": "integer"
+        },
+        "transmissionType": {
+          "type": "integer",
+          "description": "- manual: 0 - automatic: 1"
+        }
+      }
+    },
+    "Stage": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "carModelID": {
+          "type": "integer"
+        },
+        "isStock": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Timing": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "range": {
+          "type": "string"
+        },
+        "stageID": {
+          "type": "integer"
+        },
+        "second1": {
+          "type": "number"
+        },
+        "second2": {
+          "type": "number"
+        },
+        "second3": {
+          "type": "number"
+        }
+      }
+    },
+    "Image": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "carModelID": {
+          "type": "integer"
+        },
+        "copyrightInformation": {
+          "type": "string"
+        },
+        "hasUpload": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "Video": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "publishedAt": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "thumbnailURL": {
+          "type": "string"
+        },
+        "videoID": {
+          "type": "string"
+        }
+      }
+    },
+    "VideoSeries": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "isPublic": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "Device": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "externalID": {
+          "type": "string"
+        },
+        "pushToken": {
+          "type": "string"
+        },
+        "isTestDevice": {
+          "type": "boolean"
+        },
+        "platform": {
+          "type": "integer"
+        },
+        "languageCode": {
+          "type": "string"
+        }
+      }
+    },
+    "Access": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    }
+  }
 }
