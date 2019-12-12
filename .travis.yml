@@ -31,6 +31,7 @@ jobs:
     - scp -i jpfanapp_ci -o StrictHostKeyChecking=no .prod.env root@178.128.203.132:~/.prod.env
     - ssh -i jpfanapp_ci root@178.128.203.132 'mkdir -p nginx'
     - scp -i jpfanapp_ci -o StrictHostKeyChecking=no nginx/server.conf root@178.128.203.132:~/nginx/server.conf
-
+    - ssh -i jpfanapp_ci root@178.128.203.132 'docker load -i jpfanappapi-image.tar && rm jpfanappapi-image.tar'
+    - ssh -i jpfanapp_ci root@178.128.203.132 'docker-compose -f docker-compose-prod.yml -p jpperformanceserver  up -d'
     after_script:
       rm jpfanapp_ci
