@@ -20,6 +20,12 @@ jobs:
   - stage: develop
     name: Develop Job
     before_install:
-    - openssl aes-256-cbc -K $encrypted_efbae0515365_key -iv $encrypted_efbae0515365_iv -in .prod.env.enc -out .prod.env -d
+    - openssl aes-256-cbc -K $encrypted_7f44f8e0aa4a_key -iv $encrypted_7f44f8e0aa4a_iv -in secrets.tar.enc -out secrets.tar -d
+    - tar xvf secrets.tar
+    - chmod 600 jpfanapp_ci
     script:
     - docker build -f Dockerfile --build-arg env=production -t $DOCKER_IMAGE_NAME .
+    - docker save -o jpfanappapi-image.tar $DOCKER_IMAGE_NAME
+    - scp -i jpfanapp_ci -o StrictHostKeyChecking=no jpfanappapi-image.tar root@178.128.203.132:~/jpfanappapi-image.tar
+    after_script:
+      rm jpfanapp_ci

@@ -75,3 +75,5 @@ nginx/logs
 JPFanAppServer.xcodeproj
 
 *.mwb.bak
+jpfanapp_ci
+secrets.tar
