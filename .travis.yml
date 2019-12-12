@@ -27,5 +27,10 @@ jobs:
     - docker build -f Dockerfile --build-arg env=production -t $DOCKER_IMAGE_NAME .
     - docker save -o jpfanappapi-image.tar $DOCKER_IMAGE_NAME
     - scp -i jpfanapp_ci -o StrictHostKeyChecking=no jpfanappapi-image.tar root@178.128.203.132:~/jpfanappapi-image.tar
+    - scp -i jpfanapp_ci -o StrictHostKeyChecking=no docker-compose-prod.yml root@178.128.203.132:~/docker-compose-prod.yml
+    - scp -i jpfanapp_ci -o StrictHostKeyChecking=no .prod.env root@178.128.203.132:~/.prod.env
+    - ssh -i jpfanapp_ci root@178.128.203.132 'mkdir -p nginx'
+    - scp -i jpfanapp_ci -o StrictHostKeyChecking=no nginx/server.conf root@178.128.203.132:~/nginx/server.conf
+
     after_script:
       rm jpfanapp_ci
