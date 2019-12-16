@@ -123,7 +123,7 @@ struct UpdateYoutubeVideosCommand: Command {
                 if let youtubeVideoThrow = try? YoutubeVideo.query(on: db).filter(\.videoID == item.id).first().wait(),
                     let youtubeVideo = youtubeVideoThrow {
                     youtubeVideo.title = item.title
-                    youtubeVideo.description = item.description
+                    youtubeVideo.description = String(item.description.prefix(250))
                     youtubeVideo.thumbnailURL = item.thumbnailURL
                     youtubeVideo.publishedAt = item.publishedAt
                     youtubeVideo.updatedAt = Date()
@@ -136,7 +136,7 @@ struct UpdateYoutubeVideosCommand: Command {
                 } else {
                     let newVideo = YoutubeVideo(videoID: item.id,
                                                 title: item.title,
-                                                description: item.description,
+                                                description: String(item.description.prefix(250)),
                                                 thumbnailURL: item.thumbnailURL,
                                                 publishedAt: item.publishedAt)
                     _ = try? newVideo.save(on: db).flatMap { savedVideo -> EventLoopFuture<Void> in
