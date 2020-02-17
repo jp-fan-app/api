@@ -123,7 +123,7 @@ struct UpdateYoutubeVideosCommand: Command {
                 if let youtubeVideoThrow = try? YoutubeVideo.query(on: db).filter(\.videoID == item.id).first().wait(),
                     let youtubeVideo = youtubeVideoThrow {
                     youtubeVideo.title = item.title
-                    youtubeVideo.description = String(item.description.prefix(250))
+                    youtubeVideo.description = String(item.description.prefix(150))
                     youtubeVideo.thumbnailURL = item.thumbnailURL
                     youtubeVideo.publishedAt = item.publishedAt
                     youtubeVideo.updatedAt = Date()
@@ -131,12 +131,12 @@ struct UpdateYoutubeVideosCommand: Command {
                     do {
                         _ = try youtubeVideo.save(on: db).wait()
                     } catch {
-                        print("error: \(error)")
+                        print("error 1: \(error)")
                     }
                 } else {
                     let newVideo = YoutubeVideo(videoID: item.id,
                                                 title: item.title,
-                                                description: String(item.description.prefix(250)),
+                                                description: String(item.description.prefix(150)),
                                                 thumbnailURL: item.thumbnailURL,
                                                 publishedAt: item.publishedAt)
                     _ = try? newVideo.save(on: db).flatMap { savedVideo -> EventLoopFuture<Void> in
@@ -156,7 +156,7 @@ struct UpdateYoutubeVideosCommand: Command {
 //                        return sendPromise.futureResult
                     }
                     .catch({ (error) in
-                        print("error: \(error)")
+                        print("error 2: \(error)")
                     })
                     .wait()
                 }
