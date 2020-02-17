@@ -144,16 +144,14 @@ struct UpdateYoutubeVideosCommand: Command {
                             return eventLoop.newSucceededFuture(result: ())
                         }
 
-                        return eventLoop.newSucceededFuture(result: ())
+                        let entityPair = EntityPair(entityType: "Video", entityID: "\(videoID)")
 
-//                        let entityPair = EntityPair(entityType: "Video", entityID: "\(videoID)")
-//
-//                        let sendPromise = eventLoop.newPromise(Void.self)
-//                        try NotificationController.sendNotificationForEntityPair(entityPair: entityPair,
-//                                                                                 db: db,
-//                                                                                 eventLoop: eventLoop,
-//                                                                                 promise: sendPromise)
-//                        return sendPromise.futureResult
+                        let sendPromise = eventLoop.newPromise(Void.self)
+                        try NotificationController.sendNotificationForEntityPair(entityPair: entityPair,
+                                                                                 db: db,
+                                                                                 eventLoop: eventLoop,
+                                                                                 promise: sendPromise)
+                        return sendPromise.futureResult
                     }
                     .catch({ (error) in
                         print("error 2: \(error)")
