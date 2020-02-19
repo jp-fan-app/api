@@ -20,6 +20,7 @@ final class CarStage: MySQLModel {
     var nm: Double?
     var lasiseInSeconds: Double?
     var carModelID: CarModel.ID
+    var isDraft: Bool
     var createdAt: Date?
     var updatedAt: Date?
 
@@ -30,7 +31,8 @@ final class CarStage: MySQLModel {
          ps: Double?,
          nm: Double?,
          lasiseInSeconds: Double?,
-         carModelID: CarModel.ID) {
+         carModelID: CarModel.ID,
+         isDraft: Bool) {
         self.id = id
         self.name = name
         self.description = description
@@ -39,6 +41,7 @@ final class CarStage: MySQLModel {
         self.nm = nm
         self.lasiseInSeconds = lasiseInSeconds
         self.carModelID = carModelID
+        self.isDraft = isDraft
         self.createdAt = Date()
         self.updatedAt = nil
     }
@@ -75,3 +78,16 @@ extension CarStage: Content { }
 
 
 extension CarStage: Parameter { }
+
+
+struct CarStageEdit: Content {
+
+    var name: String
+    var description: String?
+    var isStock: Bool
+    var ps: Double?
+    var nm: Double?
+    var lasiseInSeconds: Double?
+    var carModelID: CarModel.ID
+
+}

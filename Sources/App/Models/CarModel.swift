@@ -33,6 +33,7 @@ final class CarModel: MySQLModel {
     var transmissionType: TransmissionType
     var axleType: AxleType
     var mainImageID: CarImage.ID?
+    var isDraft: Bool
     var createdAt: Date?
     var updatedAt: Date?
 
@@ -41,13 +42,15 @@ final class CarModel: MySQLModel {
          manufacturerID: Manufacturer.ID,
          transmissionType: TransmissionType,
          axleType: AxleType,
-         mainImageID: CarImage.ID?) {
+         mainImageID: CarImage.ID?,
+         isDraft: Bool) {
         self.id = id
         self.name = name
         self.manufacturerID = manufacturerID
         self.transmissionType = transmissionType
         self.axleType = axleType
         self.mainImageID = mainImageID
+        self.isDraft = isDraft
         self.createdAt = Date()
         self.updatedAt = nil
     }
@@ -93,3 +96,14 @@ extension CarModel: Content { }
 
 
 extension CarModel: Parameter { }
+
+
+struct CarModelEdit: Content {
+
+    var name: String
+    var manufacturerID: Manufacturer.ID
+    var transmissionType: CarModel.TransmissionType
+    var axleType: CarModel.AxleType
+    var mainImageID: CarImage.ID?
+
+}

@@ -15,7 +15,9 @@ public func routes(_ router: Router) throws {
 
         let token = User.tokenAuthMiddleware()
         let guardAuth = User.guardAuthMiddleware()
+        let adminMiddleware = AdminMiddleware()
         let authenticated = router.grouped([token, guardAuth])
+        let admin = router.grouped([token, guardAuth, adminMiddleware])
 
         // MARK: Auth
 
@@ -28,50 +30,56 @@ public func routes(_ router: Router) throws {
         let manufacturerController = ManufacturerController()
         router.get("manufacturers", use: manufacturerController.index)
         router.get("manufacturers", Manufacturer.parameter, use: manufacturerController.show)
-        authenticated.post("manufacturers", use: manufacturerController.create)
-        authenticated.patch("manufacturers", Manufacturer.parameter, use: manufacturerController.patch)
-        authenticated.delete("manufacturers", Manufacturer.parameter, use: manufacturerController.delete)
-
         router.get("manufacturers", Manufacturer.parameter, "models", use: manufacturerController.models)
+        authenticated.post("manufacturers", use: manufacturerController.create)
+        authenticated.get("manufacturers", "draft", use: manufacturerController.indexDraft)
+        admin.patch("manufacturers", Manufacturer.parameter, use: manufacturerController.patch)
+        admin.post("manufacturers", Manufacturer.parameter, "publish", use: manufacturerController.publish)
+        admin.delete("manufacturers", Manufacturer.parameter, use: manufacturerController.delete)
 
         // MARK: Models
 
         let carModelController = CarModelController()
         router.get("models", use: carModelController.index)
         router.get("models", CarModel.parameter, use: carModelController.show)
-        authenticated.post("models", use: carModelController.create)
-        authenticated.patch("models", CarModel.parameter, use: carModelController.patch)
-        authenticated.delete("models", CarModel.parameter, use: carModelController.delete)
-
         router.get("models", CarModel.parameter, "images", use: carModelController.images)
         router.get("models", CarModel.parameter, "stages", use: carModelController.stages)
+        authenticated.post("models", use: carModelController.create)
+        authenticated.get("models", "draft", use: carModelController.indexDraft)
+        admin.patch("models", CarModel.parameter, use: carModelController.patch)
+        admin.post("models", CarModel.parameter, "publish", use: carModelController.publish)
+        admin.delete("models", CarModel.parameter, use: carModelController.delete)
 
         // MARK: Images
 
         let carImageController = CarImageController()
         router.get("images", use: carImageController.index)
         router.get("images", CarImage.parameter, use: carImageController.show)
-        authenticated.post("images", use: carImageController.create)
-        authenticated.patch("images", CarImage.parameter, use: carImageController.patch)
-        authenticated.delete("images", CarImage.parameter, use: carImageController.delete)
-
-        authenticated.post("images", CarImage.parameter, "upload", use: carImageController.upload)
         router.get("images", CarImage.parameter, "file", use: carImageController.file)
+        authenticated.post("images", use: carImageController.create)
+        authenticated.post("images", CarImage.parameter, "upload", use: carImageController.upload)
+        authenticated.get("images", "draft", use: carImageController.indexDraft)
+        admin.patch("images", CarImage.parameter, use: carImageController.patch)
+        admin.post("images", CarImage.parameter, "publish", use: carImageController.publish)
+        admin.delete("images", CarImage.parameter, use: carImageController.delete)
 
         // MARK: Stages
 
         let carStageController = CarStageController()
         router.get("stages", use: carStageController.index)
         router.get("stages", CarStage.parameter, use: carStageController.show)
-        authenticated.post("stages", use: carStageController.create)
-        authenticated.patch("stages", CarStage.parameter, use: carStageController.patch)
-        authenticated.delete("stages", CarStage.parameter, use: carStageController.delete)
-
         router.get("stages", CarStage.parameter, "timings", use: carStageController.timings)
         router.get("stages", CarStage.parameter, "videos", use: carStageController.videos)
-        authenticated.post("stages", CarStage.parameter, "videos", YoutubeVideo.parameter, use: carStageController.addVideoRelation)
-        authenticated.delete("stages", CarStage.parameter, "videos", YoutubeVideo.parameter, use: carStageController.removeVideoRelation)
+        authenticated.get("stages", CarStage.parameter, "videos", "draft", use: carStageController.videosDraft)
         router.get("stagesVideosRelations", use: carStageController.videosRelations)
+        authenticated.post("stages", use: carStageController.create)
+        authenticated.post("stages", CarStage.parameter, "videos", YoutubeVideo.parameter, use: carStageController.addVideoRelation)
+        authenticated.get("stages", "draft", use: carStageController.indexDraft)
+        admin.patch("stages", CarStage.parameter, use: carStageController.patch)
+        admin.post("stages", CarStage.parameter, "publish", use: carStageController.publish)
+        admin.post("stages", CarStage.parameter, "videos", YoutubeVideo.parameter, "publish", use: carStageController.publishVideoRelation)
+        admin.delete("stages", CarStage.parameter, use: carStageController.delete)
+        admin.delete("stages", CarStage.parameter, "videos", YoutubeVideo.parameter, use: carStageController.removeVideoRelation)
 
         // MARK: Stage Timings
 
@@ -79,8 +87,10 @@ public func routes(_ router: Router) throws {
         router.get("timings", use: stageTimingController.index)
         router.get("timings", StageTiming.parameter, use: stageTimingController.show)
         authenticated.post("timings", use: stageTimingController.create)
-        authenticated.patch("timings", StageTiming.parameter, use: stageTimingController.patch)
-        authenticated.delete("timings", StageTiming.parameter, use: stageTimingController.delete)
+        authenticated.get("timings", "draft", use: stageTimingController.indexDraft)
+        admin.patch("timings", StageTiming.parameter, use: stageTimingController.patch)
+        admin.post("timings", StageTiming.parameter, "publish", use: stageTimingController.publish)
+        admin.delete("timings", StageTiming.parameter, use: stageTimingController.delete)
 
         // MARK: Videos
 
@@ -94,48 +104,50 @@ public func routes(_ router: Router) throws {
         // MARK: Devices
 
         let deviceController = DeviceController()
-        authenticated.get("devices", use: deviceController.index)
         router.get("devices", String.parameter, use: deviceController.show)
         router.post("devices", use: deviceController.create)
         router.patch("devices", String.parameter, use: deviceController.patch)
         router.delete("devices", String.parameter, use: deviceController.delete)
-
-        authenticated.post("devices", String.parameter, "setTestDevice", use: deviceController.setTestDevice)
         router.post("devices", String.parameter, "ping", use: deviceController.ping)
         router.get("devices", String.parameter, "notificationPreferences", use: deviceController.notificationPreferences)
         router.post("devices", String.parameter, "notificationPreferences", use: deviceController.createNotificationPreference)
         router.delete("devices", String.parameter, "notificationPreferences", Int.parameter, use: deviceController.deleteNotificationPreference)
+        admin.get("devices", use: deviceController.index)
+        admin.post("devices", String.parameter, "setTestDevice", use: deviceController.setTestDevice)
 
         // MARK: Notifications
 
         let notificationController = NotificationController()
-        authenticated.get("notifications", "devicesForEntityPair", use: notificationController.devicesForEntityPair)
-        authenticated.post("notifications", "sendNotificationForEntityPair", use: notificationController.sendNotificationForEntityPair)
         router.post("notifications", "track", String.parameter, use: notificationController.track)
+        admin.get("notifications", "devicesForEntityPair", use: notificationController.devicesForEntityPair)
+        admin.post("notifications", "sendNotificationForEntityPair", use: notificationController.sendNotificationForEntityPair)
 
         // MARK: Access
 
         let accessController = AccessController()
-        authenticated.get("access", use: accessController.index)
-        authenticated.get("access", Access.parameter, use: accessController.show)
-        authenticated.post("access", use: accessController.create)
-        authenticated.patch("access", Access.parameter, use: accessController.patch)
-        authenticated.delete("access", Access.parameter, use: accessController.delete)
+        admin.get("access", use: accessController.index)
+        admin.get("access", Access.parameter, use: accessController.show)
+        admin.post("access", use: accessController.create)
+        admin.patch("access", Access.parameter, use: accessController.patch)
+        admin.delete("access", Access.parameter, use: accessController.delete)
 
         // MARK: Video Series
 
         let videoSerieController = VideoSerieController()
         router.get("videoSeries", use: videoSerieController.index)
         router.get("videoSeries", VideoSerie.parameter, use: videoSerieController.show)
-        authenticated.post("videoSeries", use: videoSerieController.create)
-        authenticated.patch("videoSeries", VideoSerie.parameter, use: videoSerieController.patch)
-        authenticated.delete("videoSeries", VideoSerie.parameter, use: videoSerieController.delete)
         router.get("videoSeries", VideoSerie.parameter, "videos", use: videoSerieController.videos)
-        authenticated.post("videoSeries", VideoSerie.parameter, "videos", YoutubeVideo.parameter, use: videoSerieController.addVideoRelation)
-        authenticated.delete("videoSeries", VideoSerie.parameter, "videos", YoutubeVideo.parameter, use: videoSerieController.removeVideoRelation)
-
         router.get("videoSeriesVideosRelations", use: videoSerieController.videosRelations)
-        authenticated.patch("videoSeries", VideoSerie.parameter, "videos", YoutubeVideo.parameter, use: videoSerieController.patchVideoRelation)
+        authenticated.get("videoSeries", "draft", use: videoSerieController.indexDraft)
+        authenticated.get("videoSeries", VideoSerie.parameter, "videos", "draft", use: videoSerieController.videosDraft)
+        authenticated.post("videoSeries", VideoSerie.parameter, "videos", YoutubeVideo.parameter, use: videoSerieController.addVideoRelation)
+        authenticated.post("videoSeries", use: videoSerieController.create)
+        admin.patch("videoSeries", VideoSerie.parameter, use: videoSerieController.patch)
+        admin.post("videoSeries", VideoSerie.parameter, "publish", use: videoSerieController.publish)
+        admin.delete("videoSeries", VideoSerie.parameter, use: videoSerieController.delete)
+        admin.delete("videoSeries", VideoSerie.parameter, "videos", YoutubeVideo.parameter, use: videoSerieController.removeVideoRelation)
+        admin.patch("videoSeries", VideoSerie.parameter, "videos", YoutubeVideo.parameter, use: videoSerieController.patchVideoRelation)
+        admin.post("videoSeries", VideoSerie.parameter, "videos", YoutubeVideo.parameter, "publish", use: videoSerieController.publishVideoRelation)
 
     }
 

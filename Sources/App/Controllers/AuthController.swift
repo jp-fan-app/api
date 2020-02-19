@@ -44,7 +44,6 @@ final class AuthController {
         return try digest.hash(password, salt: salt)
     }
 
-
     func changePassword(_ req: Request) throws -> Future<HTTPStatus> {
         return try req.content.decode(ChangePasswordRequest.self).flatMap { changePasswordRequest in
             let user = try req.requireAuthenticated(User.self)

@@ -18,6 +18,7 @@ final class StageTiming: MySQLModel {
     var second2: Double?
     var second3: Double?
     var stageID: CarStage.ID
+    var isDraft: Bool
     var createdAt: Date?
     var updatedAt: Date?
 
@@ -26,13 +27,15 @@ final class StageTiming: MySQLModel {
          second1: Double?,
          second2: Double?,
          second3: Double?,
-         stageID: CarStage.ID) {
+         stageID: CarStage.ID,
+         isDraft: Bool) {
         self.id = id
         self.range = range
         self.second1 = second1
         self.second2 = second2
         self.second3 = second3
         self.stageID = stageID
+        self.isDraft = isDraft
         self.createdAt = Date()
         self.updatedAt = nil
     }
@@ -61,3 +64,14 @@ extension StageTiming: Content { }
 
 
 extension StageTiming: Parameter { }
+
+
+struct StageTimingEdit: Content {
+
+    var range: String
+    var second1: Double?
+    var second2: Double?
+    var second3: Double?
+    var stageID: CarStage.ID
+
+}

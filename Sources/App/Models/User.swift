@@ -16,6 +16,7 @@ final class User: MySQLModel {
     var name: String
     var email: String
     var passwordHash: String
+    var isAdmin: Bool
     var createdAt: Date?
     var updatedAt: Date?
 
@@ -24,6 +25,7 @@ final class User: MySQLModel {
         self.name = name
         self.email = email
         self.passwordHash = passwordHash
+        self.isAdmin = false
         self.createdAt = Date()
         self.updatedAt = nil
     }

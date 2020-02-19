@@ -15,15 +15,18 @@ final class CarImage: MySQLModel {
     var id: Int?
     var copyrightInformation: String
     var carModelID: CarModel.ID
+    var isDraft: Bool
     var createdAt: Date?
     var updatedAt: Date?
 
     init(id: Int? = nil,
          copyrightInformation: String,
-         carModelID: CarModel.ID) {
+         carModelID: CarModel.ID,
+         isDraft: Bool) {
         self.id = id
         self.copyrightInformation = copyrightInformation
         self.carModelID = carModelID
+        self.isDraft = isDraft
         self.createdAt = Date()
         self.updatedAt = nil
     }
@@ -77,6 +80,7 @@ final class CarImage: MySQLModel {
                                 copyrightInformation: copyrightInformation,
                                 carModelID: carModelID,
                                 hasUpload: hasUpload,
+                                isDraft: isDraft,
                                 createdAt: createdAt,
                                 updatedAt: updatedAt)
     }
@@ -100,12 +104,21 @@ extension CarImage: Content { }
 extension CarImage: Parameter { }
 
 
+struct CarImageEdit: Content {
+
+    var copyrightInformation: String
+    var carModelID: CarModel.ID
+
+}
+
+
 struct ResolvedCarImage: Content {
 
     var id: Int?
     var copyrightInformation: String
     var carModelID: CarModel.ID
     var hasUpload: Bool
+    var isDraft: Bool
     var createdAt: Date?
     var updatedAt: Date?
 

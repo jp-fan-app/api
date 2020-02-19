@@ -14,12 +14,14 @@ final class Manufacturer: MySQLModel {
 
     var id: Int?
     var name: String
+    var isDraft: Bool
     var createdAt: Date?
     var updatedAt: Date?
 
-    init(id: Int? = nil, name: String) {
+    init(id: Int? = nil, name: String, isDraft: Bool) {
         self.id = id
         self.name = name
+        self.isDraft = isDraft
         self.createdAt = Date()
         self.updatedAt = nil
     }
@@ -38,3 +40,10 @@ extension Manufacturer: Content { }
 
 
 extension Manufacturer: Parameter { }
+
+
+struct ManufacturerEdit: Content {
+
+    let name: String
+
+}

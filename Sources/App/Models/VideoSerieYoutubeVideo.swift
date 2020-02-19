@@ -24,15 +24,18 @@ final class VideoSerieYoutubeVideo: MySQLPivot {
 
     var description: String?
 
+    var isDraft: Bool
     var createdAt: Date?
     var updatedAt: Date?
 
     init(id: Int? = nil,
          youtubeVideoID: Int,
-         videoSerieID: Int) {
+         videoSerieID: Int,
+         isDraft: Bool) {
         self.id = id
         self.youtubeVideoID = youtubeVideoID
         self.videoSerieID = videoSerieID
+        self.isDraft = isDraft
         self.createdAt = Date()
         self.updatedAt = nil
     }

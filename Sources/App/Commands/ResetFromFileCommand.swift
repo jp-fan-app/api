@@ -234,7 +234,7 @@ struct ResetFromFileCommand: Command {
                 if let manufacturer = manufacturer {
                     return context.container.eventLoop.newSucceededFuture(result: manufacturer)
                 } else {
-                    return Manufacturer(name: name).create(on: db)
+                    return Manufacturer(name: name, isDraft: false).create(on: db)
                 }
             }
         }
@@ -251,7 +251,8 @@ struct ResetFromFileCommand: Command {
                             manufacturerID: manufacturerID,
                             transmissionType: transmissionType,
                             axleType: axleType,
-                            mainImageID: nil).create(on: db)
+                            mainImageID: nil,
+                            isDraft: false).create(on: db)
         }
     }
 
@@ -280,7 +281,8 @@ struct ResetFromFileCommand: Command {
         return try context.container.withPooledConnection(to: .mysql)
         { (db: MySQLDatabase.Connection) -> EventLoopFuture<CarImage> in
             CarImage(copyrightInformation: copyrightInformation,
-                     carModelID: carModelID).create(on: db)
+                     carModelID: carModelID,
+                     isDraft: false).create(on: db)
         }.map { carImage in
             if absoluteImageFileURL.path.contains("no_image.jpg") {
 //                print("skip no images")
@@ -314,14 +316,16 @@ struct ResetFromFileCommand: Command {
                             ps: ps,
                             nm: nm,
                             lasiseInSeconds: nil,
-                            carModelID: carModelID)
+                            carModelID: carModelID,
+                            isDraft: false)
             .save(on: db).flatMap { carStage -> EventLoopFuture<CarStage> in
                 if let youtubeId = youtubeId {
                     return YoutubeVideo.query(on: db).filter(\.videoID, .equal, youtubeId).first().flatMap { youtubeVideo in
                         if let youtubeVideo = youtubeVideo {
                             return CarStageYoutubeVideo(id: nil,
                                                         youtubeVideoID: youtubeVideo.id!,
-                                                        carStageID: carStage.id!)
+                                                        carStageID: carStage.id!,
+                                                        isDraft: false)
                             .save(on: db).flatMap(to: CarStage.self) { _ in
                                 return context.container.eventLoop.newSucceededFuture(result: carStage)
                             }
@@ -378,7 +382,8 @@ struct ResetFromFileCommand: Command {
                 second1: seconds[safe: 0],
                 second2: seconds[safe: 1],
                 second3: seconds[safe: 2],
-                stageID: carStageID).save(on: db)
+                stageID: carStageID,
+                isDraft: false).save(on: db)
         }
     }
 

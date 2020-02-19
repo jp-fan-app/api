@@ -7,12 +7,29 @@
 
 
 import Vapor
+import FluentMySQL
 
 
 final class CarImageController {
 
     func index(_ req: Request) throws -> Future<[ResolvedCarImage]> {
-        return CarImage.query(on: req).all().map(to: [ResolvedCarImage].self) { carImages in
+        return CarImage
+            .query(on: req)
+            .filter(\.isDraft == false)
+            .all()
+            .map(to: [ResolvedCarImage].self)
+        { carImages in
+            return carImages.compactMap({ $0.resolvedCarImage() })
+        }
+    }
+
+    func indexDraft(_ req: Request) throws -> Future<[ResolvedCarImage]> {
+        return CarImage
+            .query(on: req)
+            .filter(\.isDraft == true)
+            .all()
+            .map(to: [ResolvedCarImage].self)
+        { carImages in
             return carImages.compactMap({ $0.resolvedCarImage() })
         }
     }
@@ -22,11 +39,15 @@ final class CarImageController {
     }
 
     func create(_ req: Request) throws -> Future<ResolvedCarImage> {
-        return try req.content.decode(CarImage.self).flatMap { carImage in
+        let user = try req.requireAuthenticated(User.self)
+        return try req.content.decode(CarImageEdit.self).flatMap { carImageEdit in
+            let carImage = CarImage(copyrightInformation: carImageEdit.copyrightInformation,
+                                    carModelID: carImageEdit.carModelID,
+                                    isDraft: !user.isAdmin)
             return carImage.ensureRelations(eventLoop: req.eventLoop, on: req).flatMap { _ in
                 return carImage.save(on: req)
             }
-        }.flatMap(to: ResolvedCarImage.self) { carImage in
+        }.flatMap(to: ResolvedCarImage.self) { (carImage: CarImage) in
             return req.eventLoop.newSucceededFuture(result: carImage.resolvedCarImage())
         }
     }
@@ -47,6 +68,16 @@ final class CarImageController {
         }
     }
 
+    func publish(_ req: Request) throws -> Future<ResolvedCarImage> {
+        return try req.parameters.next(CarImage.self).flatMap { carImage in
+            carImage.isDraft = false
+            carImage.updatedAt = Date()
+            return carImage.save(on: req).flatMap(to: ResolvedCarImage.self) { (carImage: CarImage) in
+                return req.eventLoop.newSucceededFuture(result: carImage.resolvedCarImage())
+            }
+        }
+    }
+
     func delete(_ req: Request) throws -> Future<HTTPStatus> {
         return try req.parameters.next(CarImage.self).flatMap { carImage in
             try carImage.removeFile()
@@ -55,7 +86,14 @@ final class CarImageController {
     }
 
     func upload(_ req: Request) throws -> Future<HTTPStatus> {
+        let user = try req.requireAuthenticated(User.self)
+
         return try req.parameters.next(CarImage.self).flatMap { carImage in
+            // only allow allows on drafts when user is not admin
+            if !user.isAdmin && !carImage.isDraft {
+                return req.eventLoop.newFailedFuture(error: Abort(.forbidden,
+                                                                  reason: "only admins can upload files for non draft images"))
+            }
             return try req.content.decode(ImageUpload.self).flatMap(to: HTTPStatus.self) { imageUpload in
                 carImage.updatedAt = Date()
                 return carImage.save(on: req).flatMap { _ in

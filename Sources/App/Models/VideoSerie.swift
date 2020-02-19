@@ -16,6 +16,7 @@ final class VideoSerie: MySQLModel {
     var title: String
     var description: String
     var isPublic: Bool
+    var isDraft: Bool
     var createdAt: Date?
     var updatedAt: Date?
 
@@ -26,11 +27,13 @@ final class VideoSerie: MySQLModel {
     init(id: Int? = nil,
          title: String,
          description: String,
-         isPublic: Bool) {
+         isPublic: Bool,
+         isDraft: Bool) {
         self.id = id
         self.title = title
         self.description = description
         self.isPublic = isPublic
+        self.isDraft = isDraft
         self.createdAt = Date()
         self.updatedAt = nil
     }
@@ -45,3 +48,12 @@ extension VideoSerie: Content { }
 
 
 extension VideoSerie: Parameter { }
+
+
+struct VideoSerieEdit: Content {
+
+    var title: String
+    var description: String
+    var isPublic: Bool
+
+}

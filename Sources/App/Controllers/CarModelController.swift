@@ -7,12 +7,23 @@
 
 
 import Vapor
+import FluentMySQL
 
 
 final class CarModelController {
 
     func index(_ req: Request) throws -> Future<[CarModel]> {
-        return CarModel.query(on: req).all()
+        return CarModel
+            .query(on: req)
+            .filter(\.isDraft == false)
+            .all()
+    }
+
+    func indexDraft(_ req: Request) throws -> Future<[CarModel]> {
+        return CarModel
+            .query(on: req)
+            .filter(\.isDraft == true)
+            .all()
     }
 
     func show(_ req: Request) throws -> Future<CarModel> {
@@ -20,7 +31,15 @@ final class CarModelController {
     }
 
     func create(_ req: Request) throws -> Future<CarModel> {
-        return try req.content.decode(CarModel.self).flatMap { carModel in
+        let user = try req.requireAuthenticated(User.self)
+        return try req.content.decode(CarModelEdit.self).flatMap { carModel in
+            let carModel = CarModel(id: nil,
+                                    name: carModel.name,
+                                    manufacturerID: carModel.manufacturerID,
+                                    transmissionType: carModel.transmissionType,
+                                    axleType: carModel.axleType,
+                                    mainImageID: carModel.mainImageID,
+                                    isDraft: !user.isAdmin)
             return carModel.ensureRelations(eventLoop: req.eventLoop, on: req).flatMap { _ in
                 return carModel.save(on: req)
             }
@@ -29,7 +48,7 @@ final class CarModelController {
 
     func patch(_ req: Request) throws -> Future<CarModel> {
         return try req.parameters.next(CarModel.self).flatMap { carModel in
-            return try req.content.decode(CarModel.self).flatMap { patchCarModel in
+            return try req.content.decode(CarModelEdit.self).flatMap { patchCarModel in
                 carModel.name = patchCarModel.name
                 carModel.manufacturerID = patchCarModel.manufacturerID
                 carModel.transmissionType = patchCarModel.transmissionType
@@ -44,6 +63,14 @@ final class CarModelController {
         }
     }
 
+    func publish(_ req: Request) throws -> Future<CarModel> {
+        return try req.parameters.next(CarModel.self).flatMap { carModel in
+            carModel.isDraft = false
+            carModel.updatedAt = Date()
+            return carModel.save(on: req)
+        }
+    }
+
     func delete(_ req: Request) throws -> Future<HTTPStatus> {
         return try req.parameters.next(CarModel.self).flatMap { carModel in
             return carModel.delete(on: req)
@@ -52,7 +79,10 @@ final class CarModelController {
 
     func images(_ req: Request) throws -> Future<[ResolvedCarImage]> {
         return try req.parameters.next(CarModel.self).flatMap(to: [CarImage].self) { carModel in
-            return try carModel.images.query(on: req).all()
+            return try carModel.images
+                .query(on: req)
+                .filter(\.isDraft == false)
+                .all()
         }.map(to: [ResolvedCarImage].self) { carImages in
             return carImages.compactMap({ $0.resolvedCarImage() })
         }
@@ -60,7 +90,10 @@ final class CarModelController {
 
     func stages(_ req: Request) throws -> Future<[CarStage]> {
         return try req.parameters.next(CarModel.self).flatMap(to: [CarStage].self) { carModel in
-            return try carModel.stages.query(on: req).all()
+            return try carModel.stages
+                .query(on: req)
+                .filter(\.isDraft == false)
+                .all()
         }
     }
 

@@ -7,6 +7,7 @@
 
 
 import Vapor
+import FluentMySQL
 
 
 final class YoutubeVideoController {
@@ -32,7 +33,10 @@ final class YoutubeVideoController {
 
     func series(_ req: Request) throws -> Future<[VideoSerie]> {
         return try req.parameters.next(YoutubeVideo.self).flatMap(to: [VideoSerie].self) { youtubeVideo in
-            return try youtubeVideo.videoSeries.query(on: req).all()
+            return try youtubeVideo.videoSeries
+                .query(on: req)
+                .filter(\.isDraft == false)
+                .all()
         }
     }
 
