@@ -19,7 +19,7 @@ final class UserController {
         let isAdmin: Bool
 
         static func fromUser(_ user: User) -> UserStruct {
-            UserStruct(id: user.id, name: user.name, email: user.email, isAdmin: user.isAdmin)
+            return UserStruct(id: user.id, name: user.name, email: user.email, isAdmin: user.isAdmin)
         }
 
     }
