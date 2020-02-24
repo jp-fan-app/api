@@ -131,6 +131,17 @@ public func routes(_ router: Router) throws {
         admin.patch("access", Access.parameter, use: accessController.patch)
         admin.delete("access", Access.parameter, use: accessController.delete)
 
+        // MARK: - User
+        let userController = UserController()
+        admin.get("user", use: userController.index)
+        admin.get("user", User.parameter, use: userController.show)
+        admin.post("user", use: userController.create)
+        admin.patch("user", User.parameter, use: userController.patch)
+        admin.post("user", User.parameter, "changePassword", use: userController.changePassword)
+        admin.get("user", User.parameter, "tokens", use: userController.showTokens)
+        admin.delete("user", User.parameter, "tokens", use: userController.deleteToken)
+        admin.delete("user", User.parameter, use: userController.delete)
+
         // MARK: Video Series
 
         let videoSerieController = VideoSerieController()

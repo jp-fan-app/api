@@ -18,7 +18,14 @@ final class AuthController {
         return ProcessInfo.processInfo.environment["AUTH_PASSWORD_SALT"] ?? ""
     }
 
-    func login(_ req: Request) throws -> Future<UserToken> {
+    struct LoginResult: Content {
+
+        let token: String
+        let isAdmin: Bool
+
+    }
+
+    func login(_ req: Request) throws -> Future<LoginResult> {
         return try req.content.decode(LoginRequest.self).flatMap { loginRequest in
             let hashedPassword = try AuthController.hashedPassword(req: req, loginRequest.password)
 
@@ -33,12 +40,14 @@ final class AuthController {
                 }
 
                 let newToken = UserToken(string: UUID().uuidString, userID: userID)
-                return newToken.save(on: req)
+                return newToken.save(on: req).map { userToken in
+                    return LoginResult(token: userToken.string, isAdmin: user.isAdmin)
+                }
             }
         }
     }
 
-    private static func hashedPassword(req: Request, _ password: String) throws -> String {
+    static func hashedPassword(req: Request, _ password: String) throws -> String {
         let digest = try req.make(BCryptDigest.self)
         let salt = passwordSalt()
         return try digest.hash(password, salt: salt)
