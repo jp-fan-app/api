@@ -123,6 +123,15 @@ final class CarStageController {
         }
     }
 
+    func timingsDraft(_ req: Request) throws -> Future<[StageTiming]> {
+        return try req.parameters.next(CarStage.self).flatMap(to: [StageTiming].self) { carStage in
+            return try carStage.timings
+                .query(on: req)
+                .filter(\.isDraft == true)
+                .all()
+        }
+    }
+
     func videos(_ req: Request) throws -> Future<[YoutubeVideo]> {
         return try req.parameters.next(CarStage.self).flatMap(to: [YoutubeVideo].self) { carStage in
             return try carStage.videos

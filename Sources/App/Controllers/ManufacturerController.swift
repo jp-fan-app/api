@@ -71,4 +71,13 @@ final class ManufacturerController {
         }
     }
 
+    func modelsDraft(_ req: Request) throws -> Future<[CarModel]> {
+        return try req.parameters.next(Manufacturer.self).flatMap(to: [CarModel].self) { manufacturer in
+            return try manufacturer.models
+                .query(on: req)
+                .filter(\.isDraft == true)
+                .all()
+        }
+    }
+
 }

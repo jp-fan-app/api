@@ -88,11 +88,31 @@ final class CarModelController {
         }
     }
 
+    func imagesDraft(_ req: Request) throws -> Future<[ResolvedCarImage]> {
+        return try req.parameters.next(CarModel.self).flatMap(to: [CarImage].self) { carModel in
+            return try carModel.images
+                .query(on: req)
+                .filter(\.isDraft == true)
+                .all()
+        }.map(to: [ResolvedCarImage].self) { carImages in
+            return carImages.compactMap({ $0.resolvedCarImage() })
+        }
+    }
+
     func stages(_ req: Request) throws -> Future<[CarStage]> {
         return try req.parameters.next(CarModel.self).flatMap(to: [CarStage].self) { carModel in
             return try carModel.stages
                 .query(on: req)
                 .filter(\.isDraft == false)
+                .all()
+        }
+    }
+
+    func stagesDraft(_ req: Request) throws -> Future<[CarStage]> {
+        return try req.parameters.next(CarModel.self).flatMap(to: [CarStage].self) { carModel in
+            return try carModel.stages
+                .query(on: req)
+                .filter(\.isDraft == true)
                 .all()
         }
     }
