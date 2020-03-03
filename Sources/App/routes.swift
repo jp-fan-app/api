@@ -102,6 +102,7 @@ public func routes(_ router: Router) throws {
         router.get("videos", use: youtubeVideoController.index)
         router.get("videos", YoutubeVideo.parameter, use: youtubeVideoController.show)
         router.get("videos", "byVideoID", String.parameter, use: youtubeVideoController.byVideoID)
+        router.post("videos", "search", use: youtubeVideoController.search)
         router.get("videos", YoutubeVideo.parameter, "stages", use: youtubeVideoController.stages)
         router.get("videos", YoutubeVideo.parameter, "series", use: youtubeVideoController.series)
 
