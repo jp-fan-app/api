@@ -9,6 +9,7 @@
 import FluentMySQL
 import Authentication
 import Random
+import VaporMonitoring
 import Vapor
 
 
@@ -17,6 +18,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     // Providers
     try services.register(FluentMySQLProvider())
     try services.register(AuthenticationProvider())
+    services.register(MetricsMiddleware(), as: MetricsMiddleware.self)
 
 
     // Server Settings
@@ -34,6 +36,8 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     // Router
     let router = EngineRouter.default()
     try routes(router)
+    let prometheusService = VaporPrometheus(router: router, services: &services, route: "metrics")
+    services.register(prometheusService)
     services.register(router, as: Router.self)
 
 
@@ -41,6 +45,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
 
     // Middlewares
     var middlewares = MiddlewareConfig()
+    middlewares.use(MetricsMiddleware.self)
     middlewares.use(ErrorMiddleware.self)
     middlewares.use(AccessMiddleware.self)
     services.register(middlewares)

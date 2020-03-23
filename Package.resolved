@@ -87,8 +87,8 @@
         "repositoryURL": "https://github.com/vapor/multipart.git",
         "state": {
           "branch": null,
-          "revision": "f063180d0b84832accd33194e06ed3c41f8609ac",
-          "version": "3.1.1"
+          "revision": "a7e0db512ff7eee7cd91d0a69dfeeec36f74d604",
+          "version": "3.1.2"
         }
       },
       {
@@ -96,8 +96,8 @@
         "repositoryURL": "https://github.com/vapor/mysql.git",
         "state": {
           "branch": null,
-          "revision": "8f2238dc48fa480ce6043ee0022ebe73c8ddc300",
-          "version": "3.3.0"
+          "revision": "97e9811b0b5d43d625bf5064032fe7b3b17a15f2",
+          "version": "3.3.1"
         }
       },
       {
@@ -137,6 +137,15 @@
         }
       },
       {
+        "package": "swift-metrics",
+        "repositoryURL": "https://github.com/apple/swift-metrics.git",
+        "state": {
+          "branch": null,
+          "revision": "09b72f68ed9b01b614c12855fc7e22876b97a97e",
+          "version": "1.2.1"
+        }
+      },
+      {
         "package": "swift-nio",
         "repositoryURL": "https://github.com/apple/swift-nio.git",
         "state": {
@@ -173,6 +182,15 @@
         }
       },
       {
+        "package": "SwiftPrometheus",
+        "repositoryURL": "https://github.com/Yasumoto/SwiftPrometheus.git",
+        "state": {
+          "branch": "nio1",
+          "revision": "fe69dfa28f885360eb268ec8fa06c2243a845a26",
+          "version": null
+        }
+      },
+      {
         "package": "SwiftyJSON",
         "repositoryURL": "https://github.com/IBM-Swift/SwiftyJSON.git",
         "state": {
@@ -186,8 +204,8 @@
         "repositoryURL": "https://github.com/vapor/template-kit.git",
         "state": {
           "branch": null,
-          "revision": "51405c83e95e8adb09565278a5e9b959c605e56c",
-          "version": "1.4.0"
+          "revision": "4370aa99c01fc19cc8272b67bf7204b2d2063680",
+          "version": "1.5.0"
         }
       },
       {
@@ -195,8 +213,8 @@
         "repositoryURL": "https://github.com/vapor/url-encoded-form.git",
         "state": {
           "branch": null,
-          "revision": "44999b47d88ca2e0c0b893599b3240e342ba39ff",
-          "version": "1.0.7"
+          "revision": "20f68fbe7fac006d4d0617ea4edcba033227359e",
+          "version": "1.1.0"
         }
       },
       {
@@ -215,6 +233,15 @@
           "branch": null,
           "revision": "642f3d4d1f0eafad651c85524d0d1c698b55399f",
           "version": "3.3.3"
+        }
+      },
+      {
+        "package": "VaporMonitoring",
+        "repositoryURL": "https://github.com/Yasumoto/VaporMonitoring.git",
+        "state": {
+          "branch": "yasumoto-middleware-approach",
+          "revision": "d8ee3bcdc54df36eb0e65b4e54d34aafa4574b98",
+          "version": null
         }
       },
       {
