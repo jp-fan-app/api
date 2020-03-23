@@ -21,6 +21,10 @@ final class AccessMiddleware: Middleware, ServiceType {
     }
 
     func respond(to request: Request, chainingTo next: Responder) throws -> EventLoopFuture<Response> {
+        if request.http.url.path.hasPrefix("/metrics") {
+            return try next.respond(to: request)
+        }
+        
         guard let accessToken = request.http.headers["x-access-token"].first else {
             throw Abort(.unauthorized, headers: HTTPHeaders(), reason: "x-access-token not set")
         }
