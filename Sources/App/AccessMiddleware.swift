@@ -21,7 +21,7 @@ final class AccessMiddleware: Middleware, ServiceType {
     }
 
     func respond(to request: Request, chainingTo next: Responder) throws -> EventLoopFuture<Response> {
-        if request.http.url.path.hasPrefix("/metrics") {
+        if request.http.url.path.hasPrefix("/metrics") || request.http.url.path.hasPrefix("/public") {
             return try next.respond(to: request)
         }
         
