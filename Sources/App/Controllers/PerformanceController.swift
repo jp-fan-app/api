@@ -24,6 +24,7 @@ final class PerformanceController {
             var stageName: String
             var mainImageID: Int?
             var lasiseInSeconds: Double
+            var lasiseFormatted: String
 
         }
 
@@ -67,12 +68,14 @@ final class PerformanceController {
             let items: [LaSiSePerformance.Item] = mappedCarModelsWithStages.map { tuple in
                 let (carModel, carStage, manufacturer) = tuple
 
+                let lasiseInSeconds = carStage.lasiseInSeconds ?? 999999
                 return LaSiSePerformance.Item(manufacturerName: manufacturer.name,
                                               modelID: carModel.id ?? 99999,
                                               modelName: carModel.name,
                                               stageName: carStage.name,
                                               mainImageID: carModel.mainImageID,
-                                              lasiseInSeconds: carStage.lasiseInSeconds ?? 999999)
+                                              lasiseInSeconds: lasiseInSeconds,
+                                              lasiseFormatted: lasiseInSeconds.formattedLaSiSeDisplayString())
             }
 
             return LaSiSePerformance(items: items)
@@ -81,3 +84,20 @@ final class PerformanceController {
 
 }
 
+
+private extension Double {
+
+    func formattedLaSiSeDisplayString() -> String {
+        let seconds = self
+
+        let minutesInt = Int(floor(seconds / 60.0))
+        let secondsInt = Int(seconds - Double(minutesInt * 60))
+        let fractionInt = Int((Double(seconds) - floor(seconds)) * 10)
+
+        let minutesString = minutesInt < 10 ? "0\(minutesInt)" : "\(minutesInt)"
+        let secondsString = secondsInt < 10 ? "0\(secondsInt)" : "\(secondsInt)"
+
+        return "\(minutesString):\(secondsString),\(fractionInt)"
+    }
+
+}
