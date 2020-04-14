@@ -167,4 +167,11 @@ public func routes(_ router: Router) throws {
 
     }
 
+    router.group("public") { router in
+
+        let performanceController = PerformanceController()
+        router.get("lasise", use: performanceController.lasise)
+
+    }
+
 }
